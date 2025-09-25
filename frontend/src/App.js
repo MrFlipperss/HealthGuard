@@ -211,11 +211,13 @@ const Dashboard = () => {
           <nav className="space-y-2 relative z-50">
             {[
               { id: 'dashboard', icon: '📊', label: 'Dashboard' },
+              { id: 'analytics', icon: '📈', label: 'Analytics' },
+              { id: 'map', icon: '🗺️', label: 'Health Map' },
               { id: 'reports', icon: '📋', label: 'Health Reports' },
               { id: 'water-quality', icon: '💧', label: 'Water Quality' },
               { id: 'doctors', icon: '👨‍⚕️', label: 'Doctor Directory' },
               { id: 'stock', icon: '💊', label: 'Medical Stock' },
-              { id: 'settings', icon: '⚙️', label: 'Settings' }
+              { id: 'guides', icon: '🎓', label: 'Health Guides' }
             ].map((item) => (
               <button
                 key={item.id}
