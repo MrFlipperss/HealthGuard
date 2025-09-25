@@ -233,14 +233,15 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border p-6 shadow-sm`}>
+                <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border p-4 md:p-6 shadow-sm hover:shadow-lg transition-shadow`}>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Alerts</p>
-                      <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{stats.alerts}</p>
+                      <p className={`text-xs md:text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'} font-medium`}>Critical Alerts</p>
+                      <p className={`text-xl md:text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mt-1`}>{stats.alerts}</p>
+                      <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'} mt-1`}>Last 7 days</p>
                     </div>
-                    <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                      <span className="text-red-600 text-xl">⚠️</span>
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-red-400 to-red-600 rounded-lg flex items-center justify-center shadow-lg">
+                      <span className="text-white text-lg md:text-xl">⚠️</span>
                     </div>
                   </div>
                 </div>
