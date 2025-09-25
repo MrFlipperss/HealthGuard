@@ -222,6 +222,8 @@ async def get_dashboard_stats():
 async def create_health_report(report: HealthReportCreate):
     try:
         report_dict = report.dict()
+        # Add reporter_id (generate UUID for anonymous or use reporter name as ID)
+        report_dict["reporter_id"] = str(uuid.uuid4()) if report.is_anonymous else report.reporter_name
         report_obj = HealthReport(**report_dict)
         report_data = prepare_for_mongo(report_obj.dict())
         await db.health_reports.insert_one(report_data)
