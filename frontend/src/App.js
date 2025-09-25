@@ -40,6 +40,9 @@ const Dashboard = () => {
   const [waterQualityData, setWaterQualityData] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [medicalStock, setMedicalStock] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     fetchDashboardData();
