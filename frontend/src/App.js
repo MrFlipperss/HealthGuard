@@ -389,49 +389,121 @@ const Dashboard = () => {
           )}
 
           {activeTab === 'water-quality' && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Water Quality Monitoring</h2>
-              </div>
-              
-              <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border shadow-sm`}>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className={`${darkMode ? 'border-gray-700' : 'border-gray-200'} border-b`}>
-                        <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Location</th>
-                        <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>TDS (ppm)</th>
-                        <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>pH Level</th>
-                        <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Status</th>
-                        <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Test Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {waterQualityData.map((data, index) => (
-                        <tr key={data.id || index} className={`${darkMode ? 'border-gray-700' : 'border-gray-200'} border-b last:border-b-0`}>
-                          <td className={`px-6 py-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                            {data.location?.address || 'Unknown Location'}
-                          </td>
-                          <td className={`px-6 py-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                            {data.tds_value}
-                          </td>
-                          <td className={`px-6 py-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                            {data.ph_level}
-                          </td>
-                          <td className="px-6 py-4">
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getWaterStatusColor(data.status)}`}>
-                              {data.status}
-                            </span>
-                          </td>
-                          <td className={`px-6 py-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                            {formatDate(data.test_date)}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+            <div className="space-y-4 md:space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <h2 className={`text-lg md:text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Water Quality Monitoring</h2>
+                <div className="flex items-center space-x-2 text-sm">
+                  <div className="flex items-center space-x-1">
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span className={`${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Safe</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <span className={`${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Moderate</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <span className={`${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Unsafe</span>
+                  </div>
                 </div>
               </div>
+              
+              {isMobile ? (
+                // Mobile Card View for Water Quality
+                <div className="space-y-4">
+                  {waterQualityData.map((data, index) => (
+                    <div key={data.id || index} className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border p-4 shadow-sm`}>
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'} truncate flex-1`}>
+                          📍 {data.location?.address || 'Unknown Location'}
+                        </h3>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ml-2 ${getWaterStatusColor(data.status)}`}>
+                          {data.status}
+                        </span>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-4 mb-3">
+                        <div>
+                          <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>TDS Level</p>
+                          <p className={`text-sm font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{data.tds_value} ppm</p>
+                        </div>
+                        <div>
+                          <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>pH Level</p>
+                          <p className={`text-sm font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{data.ph_level}</p>
+                        </div>
+                        <div>
+                          <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Turbidity</p>
+                          <p className={`text-sm font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{data.turbidity} NTU</p>
+                        </div>
+                        <div>
+                          <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Chlorine</p>
+                          <p className={`text-sm font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{data.chlorine_level} mg/L</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between text-xs">
+                        <span className={`${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                          Tested by: {data.tested_by}
+                        </span>
+                        <span className={`${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                          {formatDate(data.test_date)}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                // Desktop Table View
+                <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border shadow-sm`}>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className={`${darkMode ? 'border-gray-700' : 'border-gray-200'} border-b`}>
+                          <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Location</th>
+                          <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>TDS (ppm)</th>
+                          <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>pH Level</th>
+                          <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Turbidity (NTU)</th>
+                          <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Chlorine (mg/L)</th>
+                          <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Status</th>
+                          <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Test Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {waterQualityData.map((data, index) => (
+                          <tr key={data.id || index} className={`${darkMode ? 'border-gray-700' : 'border-gray-200'} border-b last:border-b-0 hover:${darkMode ? 'bg-gray-750' : 'bg-gray-50'} transition-colors`}>
+                            <td className={`px-6 py-4 ${darkMode ? 'text-white' : 'text-gray-900'} font-medium max-w-48`}>
+                              <div className="truncate" title={data.location?.address}>
+                                📍 {data.location?.address || 'Unknown Location'}
+                              </div>
+                            </td>
+                            <td className={`px-6 py-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'} font-mono`}>
+                              {data.tds_value}
+                            </td>
+                            <td className={`px-6 py-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'} font-mono`}>
+                              {data.ph_level}
+                            </td>
+                            <td className={`px-6 py-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'} font-mono`}>
+                              {data.turbidity}
+                            </td>
+                            <td className={`px-6 py-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'} font-mono`}>
+                              {data.chlorine_level}
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getWaterStatusColor(data.status)}`}>
+                                {data.status}
+                              </span>
+                            </td>
+                            <td className={`px-6 py-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                              <div className="text-sm">{formatDate(data.test_date)}</div>
+                              <div className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>by {data.tested_by}</div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
