@@ -202,7 +202,7 @@ const Dashboard = () => {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6">
+        <main className={`flex-1 p-4 md:p-6 ${isMobile && sidebarOpen ? 'blur-sm' : ''} transition-all duration-300`}>
           {activeTab === 'dashboard' && (
             <div className="space-y-6">
               {/* Summary Cards */}
