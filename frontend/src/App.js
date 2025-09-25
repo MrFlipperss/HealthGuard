@@ -703,18 +703,19 @@ const ReportModal = ({ onClose, onSubmit, darkMode }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
           <div>
-            <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              Reporter Name
+            <label className={`block text-xs md:text-sm font-medium mb-1 md:mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              Reporter Name *
             </label>
             <input
               type="text"
               value={formData.reporter_name}
               onChange={(e) => setFormData({...formData, reporter_name: e.target.value})}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+              className={`w-full px-3 py-2.5 md:py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm md:text-base ${
+                darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
               }`}
+              placeholder="Enter your name"
               required
             />
           </div>
