@@ -2,6 +2,37 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  BarElement,
+} from 'chart.js';
+import { Line, Doughnut, Bar } from 'react-chartjs-2';
+import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from 'react-leaflet';
+import { toast, ToastContainer } from 'react-toastify';
+import { motion, AnimatePresence } from 'framer-motion';
+import 'leaflet/dist/leaflet.css';
+import 'react-toastify/dist/ReactToastify.css';
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  BarElement
+);
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
