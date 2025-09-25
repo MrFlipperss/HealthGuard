@@ -159,8 +159,21 @@ const Dashboard = () => {
 
       <div className="flex">
         {/* Sidebar */}
-        <aside className={`w-64 h-screen ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-r p-6`}>
-          <nav className="space-y-2">
+        <aside className={`
+          ${isMobile ? 'fixed inset-y-0 left-0 z-50' : 'relative'} 
+          ${isMobile && !sidebarOpen ? '-translate-x-full' : 'translate-x-0'}
+          ${isMobile ? 'w-64' : 'w-64'} 
+          h-screen ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} 
+          border-r p-4 md:p-6 transition-transform duration-300 ease-in-out
+        `}>
+          {/* Mobile backdrop */}
+          {isMobile && sidebarOpen && (
+            <div 
+              className="fixed inset-0 bg-black bg-opacity-50 z-40"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
+          <nav className="space-y-2 relative z-50">
             {[
               { id: 'dashboard', icon: '📊', label: 'Dashboard' },
               { id: 'reports', icon: '📋', label: 'Health Reports' },
@@ -171,14 +184,17 @@ const Dashboard = () => {
             ].map((item) => (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                onClick={() => {
+                  setActiveTab(item.id);
+                  if (isMobile) setSidebarOpen(false);
+                }}
+                className={`w-full flex items-center space-x-3 px-3 md:px-4 py-2 md:py-3 rounded-lg transition-colors text-sm md:text-base ${
                   activeTab === item.id
                     ? (darkMode ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white')
                     : (darkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100')
                 }`}
               >
-                <span>{item.icon}</span>
+                <span className="text-lg">{item.icon}</span>
                 <span>{item.label}</span>
               </button>
             ))}
