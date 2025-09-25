@@ -284,8 +284,16 @@ const Dashboard = () => {
       await axios.post(`${API}/reports`, reportData);
       setShowReportModal(false);
       fetchDashboardData();
+      toast.success('Health report submitted successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } catch (error) {
       console.error('Error submitting report:', error);
+      toast.error('Failed to submit report. Please try again.', {
+        position: "top-right",
+        autoClose: 5000,
+      });
     }
   };
 
