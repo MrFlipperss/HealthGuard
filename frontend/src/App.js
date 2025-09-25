@@ -721,101 +721,107 @@ const ReportModal = ({ onClose, onSubmit, darkMode }) => {
           </div>
 
           <div>
-            <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              Report Type
+            <label className={`block text-xs md:text-sm font-medium mb-1 md:mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              Report Type *
             </label>
             <select
               value={formData.report_type}
               onChange={(e) => setFormData({...formData, report_type: e.target.value})}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              className={`w-full px-3 py-2.5 md:py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm md:text-base ${
                 darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
               }`}
             >
-              <option value="disease">Disease Report</option>
-              <option value="water_quality">Water Quality Issue</option>
-              <option value="complaint">Anonymous Complaint</option>
+              <option value="disease">🦠 Disease Report</option>
+              <option value="water_quality">💧 Water Quality Issue</option>
+              <option value="complaint">⚠️ Anonymous Complaint</option>
             </select>
           </div>
 
           <div>
-            <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              Symptoms/Description
+            <label className={`block text-xs md:text-sm font-medium mb-1 md:mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              Symptoms/Description *
             </label>
             <textarea
               value={formData.symptoms}
               onChange={(e) => setFormData({...formData, symptoms: e.target.value})}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+              className={`w-full px-3 py-2.5 md:py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm md:text-base resize-none ${
+                darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
               }`}
-              rows="3"
+              rows={isMobile ? "4" : "3"}
+              placeholder="Describe the symptoms or issue in detail..."
               required
             />
           </div>
 
-          <div>
-            <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              Severity Level
-            </label>
-            <select
-              value={formData.severity}
-              onChange={(e) => setFormData({...formData, severity: e.target.value})}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
-              }`}
-            >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-              <option value="critical">Critical</option>
-            </select>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+            <div>
+              <label className={`block text-xs md:text-sm font-medium mb-1 md:mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                Severity Level *
+              </label>
+              <select
+                value={formData.severity}
+                onChange={(e) => setFormData({...formData, severity: e.target.value})}
+                className={`w-full px-3 py-2.5 md:py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm md:text-base ${
+                  darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                }`}
+              >
+                <option value="low">🟢 Low</option>
+                <option value="medium">🟡 Medium</option>
+                <option value="high">🟠 High</option>
+                <option value="critical">🔴 Critical</option>
+              </select>
+            </div>
+
+            <div>
+              <label className={`block text-xs md:text-sm font-medium mb-1 md:mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                Location/Address
+              </label>
+              <input
+                type="text"
+                value={formData.location.address}
+                onChange={(e) => setFormData({
+                  ...formData, 
+                  location: {...formData.location, address: e.target.value}
+                })}
+                className={`w-full px-3 py-2.5 md:py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm md:text-base ${
+                  darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                }`}
+                placeholder="Enter your location"
+              />
+            </div>
           </div>
 
-          <div>
-            <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              Location/Address
-            </label>
-            <input
-              type="text"
-              value={formData.location.address}
-              onChange={(e) => setFormData({
-                ...formData, 
-                location: {...formData.location, address: e.target.value}
-              })}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
-              }`}
-              placeholder="Enter your location"
-            />
-          </div>
-
-          <div className="flex items-center">
+          <div className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
             <input
               type="checkbox"
               id="anonymous"
               checked={formData.is_anonymous}
               onChange={(e) => setFormData({...formData, is_anonymous: e.target.checked})}
-              className="mr-2"
+              className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
             />
-            <label htmlFor="anonymous" className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              Submit anonymously
+            <label htmlFor="anonymous" className={`text-xs md:text-sm flex-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <span className="font-medium">Submit anonymously</span>
+              <div className={`text-xs mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                Your identity will be protected
+              </div>
             </label>
           </div>
 
-          <div className="flex space-x-3 pt-4">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4 md:pt-6">
             <button
               type="button"
               onClick={onClose}
-              className={`flex-1 px-4 py-2 border rounded-lg ${
+              className={`flex-1 px-4 py-2.5 md:py-2 border rounded-lg text-sm md:text-base transition-colors ${
                 darkMode 
                   ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
                   : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-              } transition-colors`}
+              }`}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+              className="flex-1 px-4 py-2.5 md:py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm md:text-base rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg"
             >
               Submit Report
             </button>
