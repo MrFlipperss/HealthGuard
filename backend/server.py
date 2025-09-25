@@ -193,7 +193,7 @@ async def get_dashboard_stats():
         active_cases = await db.health_reports.count_documents({"status": "active"})
         
         # Count alerts (high severity reports in last 7 days)
-        seven_days_ago = datetime.now(timezone.utc) - datetime.timedelta(days=7)
+        seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
         alerts = await db.health_reports.count_documents({
             "severity": {"$in": ["high", "critical"]},
             "date_reported": {"$gte": seven_days_ago.isoformat()}
