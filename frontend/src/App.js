@@ -1494,6 +1494,141 @@ const ReportModal = ({ onClose, onSubmit, darkMode }) => {
   );
 };
 
+// Guide Modal Component
+const GuideModal = ({ guide, onClose, darkMode }) => {
+  const [currentStep, setCurrentStep] = useState(0);
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border max-w-2xl w-full max-h-[90vh] overflow-hidden`}
+      >
+        {/* Header */}
+        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+          <div>
+            <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              {guide.title}
+            </h2>
+            <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'} mt-1`}>
+              {guide.category} • {guide.duration} • {guide.difficulty}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className={`p-2 rounded-lg ${darkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-white' : 'hover:bg-gray-100 text-gray-500 hover:text-gray-700'} transition-colors`}
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="max-h-[70vh] overflow-y-auto">
+          {/* Video Placeholder */}
+          <div className="relative h-64 bg-gray-900">
+            <img 
+              src={guide.video_placeholder}
+              alt={guide.title}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+              <button className="w-16 h-16 bg-white bg-opacity-90 rounded-full flex items-center justify-center text-2xl hover:bg-opacity-100 transition-all">
+                ▶️
+              </button>
+            </div>
+            <div className="absolute top-4 right-4 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
+              📹 Interactive Tutorial
+            </div>
+          </div>
+
+          {/* Description */}
+          <div className="p-6">
+            <h3 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              About This Guide
+            </h3>
+            <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
+              {guide.description}
+            </p>
+
+            {/* Steps */}
+            <h3 className={`text-lg font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              Step-by-Step Instructions
+            </h3>
+            <div className="space-y-3">
+              {guide.steps.map((step, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className={`flex items-start space-x-3 p-3 rounded-lg border ${
+                    currentStep === index
+                      ? (darkMode ? 'border-blue-500 bg-blue-900 bg-opacity-20' : 'border-blue-500 bg-blue-50')
+                      : (darkMode ? 'border-gray-600 bg-gray-700 bg-opacity-20' : 'border-gray-200 bg-gray-50')
+                  }`}
+                >
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold ${
+                    currentStep >= index
+                      ? 'bg-blue-500 text-white'
+                      : (darkMode ? 'bg-gray-600 text-gray-300' : 'bg-gray-300 text-gray-600')
+                  }`}>
+                    {currentStep > index ? '✓' : index + 1}
+                  </div>
+                  <div className="flex-1">
+                    <p className={`${darkMode ? 'text-gray-300' : 'text-gray-700'} ${currentStep === index ? 'font-medium' : ''}`}>
+                      {step}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Progress Controls */}
+            <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
+              <button
+                onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
+                disabled={currentStep === 0}
+                className={`px-4 py-2 rounded-lg ${
+                  currentStep === 0
+                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    : (darkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-500 text-white hover:bg-gray-600')
+                } transition-colors`}
+              >
+                ← Previous Step
+              </button>
+              
+              <div className="flex items-center space-x-1">
+                {guide.steps.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-2 h-2 rounded-full ${
+                      currentStep >= index ? 'bg-blue-500' : (darkMode ? 'bg-gray-600' : 'bg-gray-300')
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={() => setCurrentStep(Math.min(guide.steps.length - 1, currentStep + 1))}
+                disabled={currentStep === guide.steps.length - 1}
+                className={`px-4 py-2 rounded-lg ${
+                  currentStep === guide.steps.length - 1
+                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    : 'bg-blue-500 text-white hover:bg-blue-600'
+                } transition-colors`}
+              >
+                Next Step →
+              </button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+// Main App Component
 function App() {
   return (
     <div className="App">
