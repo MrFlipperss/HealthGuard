@@ -262,10 +262,18 @@ const Dashboard = () => {
       setWaterQualityData(waterRes.data);
       setDoctors(doctorsRes.data);
       setMedicalStock(stockRes.data);
+      
+      // Show success notification
+      toast.success('Dashboard data updated successfully!', {
+        position: "top-right",
+        autoClose: 2000,
+      });
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
-      // Show user-friendly error message
-      alert('Unable to load data. Please check your connection and try again.');
+      toast.error('Unable to load data. Please check your connection and try again.', {
+        position: "top-right", 
+        autoClose: 5000,
+      });
     } finally {
       setLoading(false);
     }
