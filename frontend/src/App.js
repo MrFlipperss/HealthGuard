@@ -1290,6 +1290,32 @@ const Dashboard = () => {
           darkMode={darkMode}
         />
       )}
+
+      {/* Guide Modal */}
+      {showGuideModal && selectedGuide && (
+        <GuideModal 
+          guide={selectedGuide}
+          onClose={() => {
+            setShowGuideModal(false);
+            setSelectedGuide(null);
+          }}
+          darkMode={darkMode}
+        />
+      )}
+
+      {/* Toast Notifications */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme={darkMode ? "dark" : "light"}
+      />
     </div>
   );
 };
