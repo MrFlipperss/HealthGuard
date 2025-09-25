@@ -1139,6 +1139,146 @@ const Dashboard = () => {
               </div>
             </div>
           )}
+
+          {activeTab === 'guides' && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-6"
+            >
+              <div className="flex items-center justify-between">
+                <h2 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Interactive Health Guides</h2>
+                <div className="flex items-center space-x-2">
+                  <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    📚 {healthGuides.length} Guides Available
+                  </span>
+                </div>
+              </div>
+
+              {/* Featured Guide Banner */}
+              <div className={`${darkMode ? 'bg-gradient-to-r from-blue-900 to-purple-900 border-gray-700' : 'bg-gradient-to-r from-blue-500 to-purple-600 border-gray-200'} rounded-xl border p-6 text-white shadow-lg`}>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-xl font-bold mb-2">🚨 Emergency Response Training</h3>
+                    <p className="text-blue-100 mb-4">Learn life-saving techniques for rural health emergencies</p>
+                    <button 
+                      onClick={() => {
+                        setSelectedGuide(healthGuides.find(g => g.category === 'Emergency'));
+                        setShowGuideModal(true);
+                      }}
+                      className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+                    >
+                      Start Learning →
+                    </button>
+                  </div>
+                  <div className="hidden md:block">
+                    <img 
+                      src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=200&h=150&fit=crop" 
+                      alt="Emergency Training"
+                      className="w-32 h-24 rounded-lg object-cover"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Guides Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {healthGuides.map((guide) => (
+                  <motion.div
+                    key={guide.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: guide.id * 0.1 }}
+                    className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border shadow-sm hover:shadow-lg transition-all cursor-pointer group`}
+                    onClick={() => {
+                      setSelectedGuide(guide);
+                      setShowGuideModal(true);
+                    }}
+                  >
+                    <div className="p-0">
+                      <img 
+                        src={guide.thumbnail}
+                        alt={guide.title}
+                        className="w-full h-40 object-cover rounded-t-xl group-hover:scale-105 transition-transform"
+                      />
+                      <div className="p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                            guide.category === 'Emergency' ? 'bg-red-100 text-red-800' :
+                            guide.category === 'Water Safety' ? 'bg-blue-100 text-blue-800' :
+                            'bg-green-100 text-green-800'
+                          }`}>
+                            {guide.category}
+                          </span>
+                          <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                            ⏱️ {guide.duration}
+                          </span>
+                        </div>
+                        <h3 className={`font-semibold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'} group-hover:text-blue-600 transition-colors`}>
+                          {guide.title}
+                        </h3>
+                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'} mb-3 line-clamp-2`}>
+                          {guide.description}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <div className={`flex items-center space-x-1 text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                              <span>📊</span>
+                              <span>{guide.difficulty}</span>
+                            </div>
+                          </div>
+                          <button className={`text-sm font-medium ${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'} transition-colors`}>
+                            Start Guide →
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Quick Actions */}
+              <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border p-6 shadow-sm`}>
+                <h3 className={`text-lg font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  🔗 Quick Actions
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <button 
+                    onClick={() => setShowReportModal(true)}
+                    className={`p-4 rounded-lg border-2 border-dashed ${darkMode ? 'border-gray-600 hover:border-blue-500 hover:bg-gray-700' : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'} transition-all text-left`}
+                  >
+                    <div className="text-2xl mb-2">📋</div>
+                    <h4 className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>Report Health Issue</h4>
+                    <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'} mt-1`}>Submit a new health report</p>
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab('water-quality')}
+                    className={`p-4 rounded-lg border-2 border-dashed ${darkMode ? 'border-gray-600 hover:border-blue-500 hover:bg-gray-700' : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'} transition-all text-left`}
+                  >
+                    <div className="text-2xl mb-2">💧</div>
+                    <h4 className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>Test Water Quality</h4>
+                    <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'} mt-1`}>Check water safety levels</p>
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab('doctors')}
+                    className={`p-4 rounded-lg border-2 border-dashed ${darkMode ? 'border-gray-600 hover:border-blue-500 hover:bg-gray-700' : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'} transition-all text-left`}
+                  >
+                    <div className="text-2xl mb-2">👨‍⚕️</div>
+                    <h4 className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>Find Doctor</h4>
+                    <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'} mt-1`}>Locate nearby medical help</p>
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab('map')}
+                    className={`p-4 rounded-lg border-2 border-dashed ${darkMode ? 'border-gray-600 hover:border-blue-500 hover:bg-gray-700' : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'} transition-all text-left`}
+                  >
+                    <div className="text-2xl mb-2">🗺️</div>
+                    <h4 className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>View Health Map</h4>
+                    <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'} mt-1`}>See regional health data</p>
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </main>
       </div>
 
