@@ -289,53 +289,101 @@ const Dashboard = () => {
 
               {/* Recent Reports Table */}
               <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border shadow-sm`}>
-                <div className="px-6 py-4 border-b border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <h2 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Recent Health Reports</h2>
+                <div className="px-4 md:px-6 py-3 md:py-4 border-b border-gray-200">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <h2 className={`text-base md:text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Recent Health Reports</h2>
                     <button
                       onClick={() => setShowReportModal(true)}
-                      className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                      className="px-3 md:px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm md:text-base rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center space-x-2"
                     >
-                      Submit New Report
+                      <span>+</span>
+                      <span>Submit New Report</span>
                     </button>
                   </div>
                 </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className={`${darkMode ? 'border-gray-700' : 'border-gray-200'} border-b`}>
-                        <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Reporter</th>
-                        <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Symptoms</th>
-                        <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Severity</th>
-                        <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Date</th>
-                        <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {recentReports.map((report, index) => (
-                        <tr key={report.id || index} className={`${darkMode ? 'border-gray-700' : 'border-gray-200'} border-b last:border-b-0`}>
-                          <td className={`px-6 py-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                
+                {/* Mobile Card View */}
+                {isMobile ? (
+                  <div className="p-4 space-y-4">
+                    {recentReports.map((report, index) => (
+                      <div key={report.id || index} className={`${darkMode ? 'bg-gray-750 border-gray-600' : 'bg-gray-50 border-gray-200'} border rounded-lg p-4`}>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                             {report.is_anonymous ? 'Anonymous' : report.reporter_name}
-                          </td>
-                          <td className={`px-6 py-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                            {report.symptoms.length > 50 ? `${report.symptoms.substring(0, 50)}...` : report.symptoms}
-                          </td>
-                          <td className="px-6 py-4">
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSeverityColor(report.severity)}`}>
-                              {report.severity}
-                            </span>
-                          </td>
-                          <td className={`px-6 py-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                          </span>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSeverityColor(report.severity)}`}>
+                            {report.severity}
+                          </span>
+                        </div>
+                        <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-2 line-clamp-2`}>
+                          {report.symptoms}
+                        </p>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className={`${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                             {formatDate(report.date_reported)}
-                          </td>
-                          <td className={`px-6 py-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                          </span>
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${report.status === 'active' ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800'}`}>
                             {report.status}
-                          </td>
+                          </span>
+                        </div>
+                        {report.location && (
+                          <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} mt-1 flex items-center space-x-1`}>
+                            <span>📍</span>
+                            <span>{report.location.address}</span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  // Desktop Table View
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className={`${darkMode ? 'border-gray-700' : 'border-gray-200'} border-b`}>
+                          <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Reporter</th>
+                          <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Symptoms</th>
+                          <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Severity</th>
+                          <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Location</th>
+                          <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Date</th>
+                          <th className={`text-left px-6 py-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Status</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                      </thead>
+                      <tbody>
+                        {recentReports.map((report, index) => (
+                          <tr key={report.id || index} className={`${darkMode ? 'border-gray-700' : 'border-gray-200'} border-b last:border-b-0 hover:${darkMode ? 'bg-gray-750' : 'bg-gray-50'} transition-colors`}>
+                            <td className={`px-6 py-4 ${darkMode ? 'text-white' : 'text-gray-900'} font-medium`}>
+                              {report.is_anonymous ? 'Anonymous' : report.reporter_name}
+                            </td>
+                            <td className={`px-6 py-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'} max-w-xs`}>
+                              <div className="truncate" title={report.symptoms}>
+                                {report.symptoms.length > 60 ? `${report.symptoms.substring(0, 60)}...` : report.symptoms}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSeverityColor(report.severity)}`}>
+                                {report.severity}
+                              </span>
+                            </td>
+                            <td className={`px-6 py-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'} max-w-40`}>
+                              <div className="truncate" title={report.location?.address}>
+                                {report.location?.address || 'Not specified'}
+                              </div>
+                            </td>
+                            <td className={`px-6 py-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                              {formatDate(report.date_reported)}
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className={`px-2 py-1 rounded text-xs font-medium ${report.status === 'active' ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800'}`}>
+                                {report.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             </div>
           )}
