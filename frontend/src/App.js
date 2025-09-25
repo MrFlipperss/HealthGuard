@@ -50,10 +50,11 @@ const Dashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
+      setLoading(true);
       const [statsRes, reportsRes, waterRes, doctorsRes, stockRes] = await Promise.all([
         axios.get(`${API}/dashboard/stats`),
-        axios.get(`${API}/reports?limit=10`),
-        axios.get(`${API}/water-quality?limit=10`),
+        axios.get(`${API}/reports?limit=15`),
+        axios.get(`${API}/water-quality?limit=15`),
         axios.get(`${API}/doctors`),
         axios.get(`${API}/medical-stock`)
       ]);
@@ -65,6 +66,10 @@ const Dashboard = () => {
       setMedicalStock(stockRes.data);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
+      // Show user-friendly error message
+      alert('Unable to load data. Please check your connection and try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
