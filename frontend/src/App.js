@@ -604,6 +604,286 @@ const Dashboard = () => {
             </div>
           )}
 
+          {activeTab === 'analytics' && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-6"
+            >
+              <div className="flex items-center justify-between">
+                <h2 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Analytics Dashboard</h2>
+                <button
+                  onClick={fetchDashboardData}
+                  className={`px-4 py-2 rounded-lg ${darkMode ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-500 text-white hover:bg-blue-600'} transition-colors`}
+                >
+                  🔄 Refresh Data
+                </button>
+              </div>
+
+              {/* Charts Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Health Trends Line Chart */}
+                {chartData.healthTrends && (
+                  <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border p-6 shadow-sm`}>
+                    <h3 className={`text-lg font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Health Reports Trend</h3>
+                    <div className="h-64">
+                      <Line 
+                        data={chartData.healthTrends}
+                        options={{
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          plugins: {
+                            legend: {
+                              labels: {
+                                color: darkMode ? '#e5e7eb' : '#374151'
+                              }
+                            }
+                          },
+                          scales: {
+                            x: {
+                              ticks: { color: darkMode ? '#e5e7eb' : '#374151' },
+                              grid: { color: darkMode ? '#374151' : '#e5e7eb' }
+                            },
+                            y: {
+                              ticks: { color: darkMode ? '#e5e7eb' : '#374151' },
+                              grid: { color: darkMode ? '#374151' : '#e5e7eb' }
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Water Quality Distribution */}
+                {chartData.waterQualityPie && (
+                  <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border p-6 shadow-sm`}>
+                    <h3 className={`text-lg font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Water Quality Distribution</h3>
+                    <div className="h-64">
+                      <Doughnut 
+                        data={chartData.waterQualityPie}
+                        options={{
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          plugins: {
+                            legend: {
+                              position: 'bottom',
+                              labels: {
+                                color: darkMode ? '#e5e7eb' : '#374151',
+                                padding: 20
+                              }
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Reports by Type */}
+                {chartData.reportsByType && (
+                  <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border p-6 shadow-sm lg:col-span-2`}>
+                    <h3 className={`text-lg font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Reports by Type</h3>
+                    <div className="h-64">
+                      <Bar 
+                        data={chartData.reportsByType}
+                        options={{
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          plugins: {
+                            legend: {
+                              display: false
+                            }
+                          },
+                          scales: {
+                            x: {
+                              ticks: { color: darkMode ? '#e5e7eb' : '#374151' },
+                              grid: { color: darkMode ? '#374151' : '#e5e7eb' }
+                            },
+                            y: {
+                              ticks: { color: darkMode ? '#e5e7eb' : '#374151' },
+                              grid: { color: darkMode ? '#374151' : '#e5e7eb' }
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Live Alerts Section */}
+              <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border shadow-sm`}>
+                <div className="px-6 py-4 border-b border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <h3 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'} flex items-center`}>
+                      <span className="animate-pulse mr-2">🔴</span>
+                      Live Alerts
+                    </h3>
+                    <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Real-time updates</span>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <div className="space-y-3">
+                    {liveAlerts.map((alert, index) => (
+                      <motion.div
+                        key={alert.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className={`p-3 rounded-lg border-l-4 ${
+                          alert.type === 'critical' ? 'bg-red-50 border-red-500' :
+                          alert.type === 'warning' ? 'bg-yellow-50 border-yellow-500' :
+                          'bg-blue-50 border-blue-500'
+                        } ${darkMode ? 'bg-opacity-20' : ''}`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className={`text-sm ${darkMode ? 'text-white' : 'text-gray-900'} font-medium`}>
+                              {alert.message}
+                            </p>
+                            <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} mt-1`}>
+                              📍 {alert.location} • {alert.timestamp.toLocaleTimeString()}
+                            </p>
+                          </div>
+                          <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                            alert.type === 'critical' ? 'bg-red-100 text-red-800' :
+                            alert.type === 'warning' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-blue-100 text-blue-800'
+                          }`}>
+                            {alert.type.toUpperCase()}
+                          </span>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {activeTab === 'map' && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-6"
+            >
+              <div className="flex items-center justify-between">
+                <h2 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Health Monitoring Map</h2>
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2 text-sm">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <span className={`${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Critical</span>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <span className={`${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Moderate</span>
+                    <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                    <span className={`${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Low</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Map Container */}
+              <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border shadow-sm overflow-hidden`}>
+                <div className="h-96 relative">
+                  {/* Placeholder for Interactive Map */}
+                  <div className="w-full h-full bg-gradient-to-br from-green-100 to-blue-100 flex items-center justify-center relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-20">
+                      <img 
+                        src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&h=400&fit=crop" 
+                        alt="Map Background"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="relative z-10 text-center">
+                      <div className="mb-4">
+                        <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-2">
+                          <span className="text-2xl text-white">🗺️</span>
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-800 mb-2">Interactive Health Map</h3>
+                        <p className="text-gray-600 text-sm max-w-md">
+                          Real-time visualization of health reports, water quality testing points, and medical facilities across the region.
+                        </p>
+                      </div>
+                      
+                      {/* Mock Map Markers */}
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 max-w-2xl">
+                        {mapData.map((point, index) => (
+                          <motion.div
+                            key={point.id}
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: index * 0.2 }}
+                            className={`p-3 rounded-lg border ${
+                              point.severity === 'critical' ? 'border-red-300 bg-red-50' :
+                              point.severity === 'high' ? 'border-orange-300 bg-orange-50' :
+                              point.severity === 'medium' ? 'border-yellow-300 bg-yellow-50' :
+                              'border-blue-300 bg-blue-50'
+                            } text-left`}
+                          >
+                            <div className="flex items-center justify-between mb-1">
+                              <span className={`w-3 h-3 rounded-full ${
+                                point.severity === 'critical' ? 'bg-red-500' :
+                                point.severity === 'high' ? 'bg-orange-500' :
+                                point.severity === 'medium' ? 'bg-yellow-500' :
+                                'bg-blue-500'
+                              }`}></span>
+                              <span className="text-xs text-gray-500">{point.count} reports</span>
+                            </div>
+                            <h4 className="font-medium text-sm text-gray-800">{point.title}</h4>
+                            <p className="text-xs text-gray-600 mt-1">
+                              📍 {point.lat.toFixed(3)}, {point.lng.toFixed(3)}
+                            </p>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Map Statistics */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border p-4 shadow-sm`}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'} font-medium`}>Active Locations</p>
+                      <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mt-1`}>{mapData.length}</p>
+                    </div>
+                    <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center">
+                      <span className="text-white text-lg">📍</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border p-4 shadow-sm`}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'} font-medium`}>Total Reports</p>
+                      <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mt-1`}>
+                        {mapData.reduce((sum, point) => sum + point.count, 0)}
+                      </p>
+                    </div>
+                    <div className="w-10 h-10 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-lg flex items-center justify-center">
+                      <span className="text-white text-lg">📊</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border p-4 shadow-sm`}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'} font-medium`}>Critical Areas</p>
+                      <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mt-1`}>
+                        {mapData.filter(point => point.severity === 'critical').length}
+                      </p>
+                    </div>
+                    <div className="w-10 h-10 bg-gradient-to-br from-red-400 to-red-600 rounded-lg flex items-center justify-center">
+                      <span className="text-white text-lg">⚠️</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {activeTab === 'water-quality' && (
             <div className="space-y-4 md:space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
