@@ -337,6 +337,21 @@ async def get_users():
 # Include the router in the main app
 app.include_router(api_router)
 
+# Admin Dashboard Route
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_dashboard():
+    """Serve the admin dashboard HTML page for government officials"""
+    try:
+        admin_html_path = Path(__file__).parent / "admin.html"
+        with open(admin_html_path, 'r', encoding='utf-8') as file:
+            html_content = file.read()
+        return HTMLResponse(content=html_content, status_code=200)
+    except FileNotFoundError:
+        return HTMLResponse(content="<h1>Admin Dashboard Not Found</h1><p>Please ensure admin.html exists in the backend directory.</p>", status_code=404)
+    except Exception as e:
+        return HTMLResponse(content=f"<h1>Error Loading Admin Dashboard</h1><p>{str(e)}</p>", status_code=500)
+
+# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
