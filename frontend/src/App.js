@@ -42,6 +42,10 @@ const Dashboard = () => {
   const [medicalStock, setMedicalStock] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [alerts, setAlerts] = useState([]);
+  const [showAlerts, setShowAlerts] = useState(false);
+  const [mapData, setMapData] = useState([]);
+  const [interactiveGuides, setInteractiveGuides] = useState([]);
   const isMobile = useIsMobile();
 
   useEffect(() => {
