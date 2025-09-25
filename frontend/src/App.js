@@ -86,7 +86,165 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
+    initializeEnhancedData();
+    setupLiveAlerts();
   }, []);
+
+  // Initialize enhanced data with mock analytics
+  const initializeEnhancedData = () => {
+    // Generate mock chart data
+    const generateHealthTrends = () => {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+      const data = months.map(() => Math.floor(Math.random() * 50) + 20);
+      return {
+        labels: months,
+        datasets: [{
+          label: 'Health Reports',
+          data: data,
+          borderColor: 'rgb(59, 130, 246)',
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          tension: 0.4,
+        }]
+      };
+    };
+
+    const generateWaterQualityPie = () => ({
+      labels: ['Safe', 'Moderate', 'Unsafe'],
+      datasets: [{
+        data: [65, 25, 10],
+        backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+      }]
+    });
+
+    const generateReportsByType = () => ({
+      labels: ['Disease Reports', 'Water Quality', 'Complaints'],
+      datasets: [{
+        label: 'Count',
+        data: [12, 8, 5],
+        backgroundColor: ['rgba(139, 69, 19, 0.8)', 'rgba(30, 144, 255, 0.8)', 'rgba(255, 165, 0, 0.8)'],
+      }]
+    });
+
+    setChartData({
+      healthTrends: generateHealthTrends(),
+      waterQualityPie: generateWaterQualityPie(),
+      reportsByType: generateReportsByType()
+    });
+
+    // Initialize health guides
+    setHealthGuides([
+      {
+        id: 1,
+        title: "Water Testing Procedure",
+        category: "Water Safety",
+        duration: "5 minutes",
+        difficulty: "Easy",
+        thumbnail: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=300&h=200&fit=crop",
+        description: "Learn how to properly test water quality in your area",
+        steps: [
+          "Collect water sample in clean container",
+          "Use testing strips for basic analysis", 
+          "Record TDS, pH, and turbidity levels",
+          "Report results through the app"
+        ],
+        video_placeholder: "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&h=400&fit=crop"
+      },
+      {
+        id: 2,
+        title: "Disease Reporting Guide", 
+        category: "Health Reporting",
+        duration: "3 minutes",
+        difficulty: "Easy",
+        thumbnail: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&h=200&fit=crop",
+        description: "Step-by-step guide to report health issues effectively",
+        steps: [
+          "Identify symptoms accurately",
+          "Note the location and time",
+          "Fill out the report form completely",
+          "Submit with appropriate severity level"
+        ],
+        video_placeholder: "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=600&h=400&fit=crop"
+      },
+      {
+        id: 3,
+        title: "Emergency Response Protocol",
+        category: "Emergency",
+        duration: "8 minutes", 
+        difficulty: "Intermediate",
+        thumbnail: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=200&fit=crop",
+        description: "What to do during health emergencies in rural areas",
+        steps: [
+          "Assess the situation quickly",
+          "Contact emergency services immediately",
+          "Provide first aid if trained",
+          "Document for follow-up reporting"
+        ],
+        video_placeholder: "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=600&h=400&fit=crop"
+      }
+    ]);
+
+    // Initialize map data with mock coordinates
+    const mockMapData = [
+      { id: 1, lat: 28.6139, lng: 77.2090, type: 'disease', severity: 'high', title: 'Fever Outbreak', count: 5 },
+      { id: 2, lat: 28.7041, lng: 77.1025, type: 'water', severity: 'critical', title: 'Water Contamination', count: 3 },
+      { id: 3, lat: 28.5355, lng: 77.3910, type: 'complaint', severity: 'medium', title: 'Medical Supply Shortage', count: 2 },
+      { id: 4, lat: 28.4595, lng: 77.0266, type: 'disease', severity: 'low', title: 'Minor Illness', count: 1 },
+    ];
+    setMapData(mockMapData);
+  };
+
+  // Setup live alerts simulation
+  const setupLiveAlerts = () => {
+    const mockAlerts = [
+      { id: 1, type: 'critical', message: 'High TDS levels detected in Sector 15 water supply', timestamp: new Date(), location: 'Sector 15' },
+      { id: 2, type: 'warning', message: 'Increase in fever cases reported in Village Rampur', timestamp: new Date(), location: 'Village Rampur' },
+      { id: 3, type: 'info', message: 'New doctor added to directory - Dr. Smith (Pediatrics)', timestamp: new Date(), location: 'Central Clinic' }
+    ];
+    
+    setLiveAlerts(mockAlerts);
+    
+    // Simulate real-time alerts
+    const interval = setInterval(() => {
+      const alertTypes = ['info', 'warning', 'critical'];
+      const messages = [
+        'Water quality test completed for Area 12',
+        'Medical stock replenished at Health Center', 
+        'New health report submitted from Village Krishnanagar',
+        'Emergency supplies requested at Remote Clinic'
+      ];
+      
+      const newAlert = {
+        id: Date.now(),
+        type: alertTypes[Math.floor(Math.random() * alertTypes.length)],
+        message: messages[Math.floor(Math.random() * messages.length)],
+        timestamp: new Date(),
+        location: 'Various Locations'
+      };
+      
+      setLiveAlerts(prev => [newAlert, ...prev.slice(0, 4)]);
+      
+      // Show toast notification
+      if (newAlert.type === 'critical') {
+        toast.error(newAlert.message, {
+          position: "top-right",
+          autoClose: 5000,
+        });
+      } else if (newAlert.type === 'warning') {
+        toast.warn(newAlert.message, {
+          position: "top-right", 
+          autoClose: 4000,
+        });
+      } else {
+        toast.info(newAlert.message, {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+    }, 15000); // New alert every 15 seconds
+
+    // Clear interval on unmount
+    return () => clearInterval(interval);
+  };
 
   const fetchDashboardData = async () => {
     try {
