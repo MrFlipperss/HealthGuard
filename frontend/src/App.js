@@ -109,31 +109,50 @@ const Dashboard = () => {
   return (
     <div className={`min-h-screen ${darkMode ? 'dark bg-gray-900' : 'bg-gray-50'}`}>
       {/* Navigation Bar */}
-      <nav className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-b px-6 py-4`}>
+      <nav className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-b px-4 md:px-6 py-3 md:py-4 relative`}>
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3 md:space-x-4">
+            {/* Mobile menu button */}
+            {isMobile && (
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className={`p-2 rounded-lg ${darkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} transition-colors`}
+              >
+                {sidebarOpen ? '✕' : '☰'}
+              </button>
+            )}
             <img 
               src="https://images.unsplash.com/photo-1630431174988-d3221f327b17?w=40&h=40&fit=crop&crop=center" 
               alt="Health Monitor Logo" 
-              className="w-10 h-10 rounded-lg object-cover"
+              className="w-8 h-8 md:w-10 md:h-10 rounded-lg object-cover"
             />
-            <h1 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+            <h1 className={`text-lg md:text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} truncate`}>
               Rural Health Monitor
             </h1>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-4">
+            {/* Refresh button */}
+            <button
+              onClick={fetchDashboardData}
+              disabled={loading}
+              className={`p-2 rounded-lg ${darkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} transition-colors disabled:opacity-50`}
+            >
+              {loading ? <span className="animate-spin">⟳</span> : '🔄'}
+            </button>
             <button
               onClick={() => setDarkMode(!darkMode)}
               className={`p-2 rounded-lg ${darkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} transition-colors`}
             >
               {darkMode ? '☀️' : '🌙'}
             </button>
-            <div className="flex items-center space-x-2">
-              <div className={`w-8 h-8 rounded-full ${darkMode ? 'bg-blue-600' : 'bg-blue-500'} flex items-center justify-center text-white font-semibold`}>
-                A
+            {!isMobile && (
+              <div className="flex items-center space-x-2">
+                <div className={`w-8 h-8 rounded-full ${darkMode ? 'bg-blue-600' : 'bg-blue-500'} flex items-center justify-center text-white font-semibold text-sm`}>
+                  A
+                </div>
+                <span className={`${darkMode ? 'text-white' : 'text-gray-900'} text-sm`}>Admin User</span>
               </div>
-              <span className={`${darkMode ? 'text-white' : 'text-gray-900'}`}>Admin User</span>
-            </div>
+            )}
           </div>
         </div>
       </nav>
