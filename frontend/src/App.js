@@ -77,6 +77,11 @@ const Dashboard = () => {
   const [showAlerts, setShowAlerts] = useState(false);
   const [mapData, setMapData] = useState([]);
   const [interactiveGuides, setInteractiveGuides] = useState([]);
+  const [chartData, setChartData] = useState({});
+  const [liveAlerts, setLiveAlerts] = useState([]);
+  const [healthGuides, setHealthGuides] = useState([]);
+  const [showGuideModal, setShowGuideModal] = useState(false);
+  const [selectedGuide, setSelectedGuide] = useState(null);
   const isMobile = useIsMobile();
 
   useEffect(() => {
