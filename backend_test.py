@@ -11,7 +11,7 @@ import uuid
 import sys
 
 # Backend URL from environment
-BACKEND_URL = "https://aquahealth-2.preview.emergentagent.com/api"
+BACKEND_URL = "https://emergency-map-7.preview.emergentagent.com/api"
 
 class BackendTester:
     def __init__(self):
