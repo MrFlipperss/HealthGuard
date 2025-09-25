@@ -660,6 +660,7 @@ const Dashboard = () => {
 
 // Report Modal Component
 const ReportModal = ({ onClose, onSubmit, darkMode }) => {
+  const isMobile = useIsMobile();
   const [formData, setFormData] = useState({
     reporter_name: '',
     report_type: 'disease',
